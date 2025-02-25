@@ -1,35 +1,41 @@
 //create web server
-const express = require('express')
-const app = express()
-//create web server
+const express = require('express');
+const app = express.Router();
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+const port = 3000;
 
-//create a route
-//GET /comments
-app.get('/comments', function (req, res) {
-    res.send('This is a GET request')
-})
+// list of comments
+let comments = [
+  { id: 1, body: "Hello world" },
+  { id: 2, body: "My first comment" },
+  { id: 3, body: "This is great" },
+  { id: 4, body: "I love this" }
+];
 
-//POST /comments
-app.post('/comments', function (req, res) {
-    res.send('This is a POST request')
-})
+// get all comments
+app.get('/comments', (req, res) => {
+  res.json(comments);
+});
 
-//PUT /comments
-app.put('/comments', function (req, res) {
-    res.send('This is a PUT request')
-})
+// get comment by id
+app.get('/comments/:id', (req, res) => {
+  const comment = comments.find(c => c.id === parseInt(req.params.id));
+  if (!comment) return res.status(404).send('The comment with the given ID was not found');
+  res.json(comment);
+});
 
-//DELETE /comments
-app.delete('/comments', function (req, res) {
-    res.send('This is a DELETE request')
-})
+// post a new comment
+app.post('/comments', (req, res) => {
+  const comment = {
+    id: comments.length + 1,
+    body: req.body.body
+  };
+  comments.push(comment);
+  res.json(comment);
+});
 
-//start the server
-app.listen(3000, function () {
-    console.log('Server is running on http://localhost:3000')
-})
-
-//start the server
-app.listen(3000, function () {
-    console.log('Server is running on http://localhost:3000')
-})
+// listen to port
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
