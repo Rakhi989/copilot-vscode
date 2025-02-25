@@ -1,50 +1,35 @@
 //create web server
-const express = require('express');
-const app = express();
-const port = 3000;
-const bodyParser = require('body-parser');
-const fs = require('fs');
+const express = require('express')
+const app = express()
+//create web server
 
-app.use(bodyParser.json());
+//create a route
+//GET /comments
+app.get('/comments', function (req, res) {
+    res.send('This is a GET request')
+})
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+//POST /comments
+app.post('/comments', function (req, res) {
+    res.send('This is a POST request')
+})
 
-app.get('/comments', (req, res) => {
-    fs.readFile('./comments.json', 'utf8', (err, data) => {
-        if (err) {
-            res.status(500).send('Error reading comments.json');
-            return;
-        }
+//PUT /comments
+app.put('/comments', function (req, res) {
+    res.send('This is a PUT request')
+})
 
-        res.send(data);
-    });
-});
+//DELETE /comments
+app.delete('/comments', function (req, res) {
+    res.send('This is a DELETE request')
+})
 
-app.post('/comments', (req, res) => {
-    const newComment = req.body;
+//start the server
+app.listen(3000, function () {
+    console.log('Server is running on http://localhost:3000')
+})
 
-    fs.readFile('./comments.json', 'utf8', (err, data) => {
-        if (err) {
-            res.status(500).send('Error reading comments.json');
-            return;
-        }
-
-        const comments = JSON.parse(data);
-        comments.push(newComment);
-
-        fs.writeFile('./comments.json', JSON.stringify(comments), (err) => {
-            if (err) {
-                res.status(500).send('Error writing comments.json');
-                return;
-            }
-
-            res.send('Comment added!');
-        });
-    });
-});
-
-app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
-});
+//start the server
+app.listen(3000, function () {
+    console.log('Server is running on http://localhost:3000')
+})
